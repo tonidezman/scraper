@@ -10,7 +10,7 @@ require_relative 'capybara-setup'
 ###### CONSTANTS ######
 #######################
 can_filter_jobs = true
-end_with_page_number = 20
+end_with_page_number = 10 # max is 10 pages
 filtered_jobs = [
   "program",
   "aplikaci",
@@ -83,14 +83,14 @@ def find_jobs(table_rows, can_filter_jobs, filtered_jobs)
         end
 
         row_data << td.first('a')['href'] if counter == 0
-        row_data << td.text
+        row_data << td.text.downcase
 
         if counter == 4
           # scan for keywords
           job_description = row_data[1]
           if can_filter_jobs
             if is_included_in_filter(job_description, filtered_jobs)
-              puts Rainbow("#{row_data[1]} => #{row_data[3]}\n").green
+              puts Rainbow("#{row_data[1]} => #{row_data[3]}\n").red
               csv << row_data
             else
               puts Rainbow("#{row_data[1]} => #{row_data[3]}\n")
